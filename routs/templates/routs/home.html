@@ -7,6 +7,18 @@
 {% block content %}
 <h1>Routes</h1>
 <div class="row">
+    <div class="col-md-8">
+        {% if routs %}
+            <h3>Rout from {{cities.from_city}} to {{cities.to_city}}</h3>
+            {% for rout in routs %}
+                <p>Time is {{rout.total_time}}</p>
+                <p>List of trains</p>
+                    {% for train in rout.trains %}
+                        <p>{{train}}</p>
+                    {% endfor %}
+            {% endfor %}
+        {% endif %}
+    </div>
     <form action="{% url 'find' %}" method="post">
         {% csrf_token %}
         {{ form.as_p }}

@@ -41,4 +41,37 @@ def get_routs(request, form) -> dict:
                 right_ways.append(rout)
         if not right_ways:
             raise ValueError("Routs throught this contry none")
+    else:
+        right_ways = all_ways
+    routs = []
+    all_trains = {}
+    for q in qs:
+        all_trains.setdefault((q.from_city_id, q.to_city_id), [])
+        all_trains[(q.from_city_id, q.to_city_id)].append(q)
+    for route in right_ways:
+        tmp = {}
+        tmp['trains'] = []
+        total_time = 0
+        for i in range(len(route)-1):
+            qs = all_trains[(route[i], route[i+1])]
+            q = qs[0]
+            total_time += q.travel_time
+            tmp['trains'].append(q)
+        tmp['total_time'] = total_time
+        if total_time <= traveling_time:
+            routs.append(tmp)
+    if not routs:
+        raise ValueError('Time is bigger')
+    sorted_routs = []
+    if len(routs) == 1:
+        sorted_routs = routs
+    else:
+        times = list(set(r['total_time'] for r in routs))
+        times = sorted(times)
+        for time in times:
+            for rout in routs:
+                if time == rout['total_time']:
+                    sorted_routs.append(rout)
+    context['routs'] = sorted_routs
+    context['cites'] = {'from_city': from_city.name, 'to_city': to_city.name}
     return context

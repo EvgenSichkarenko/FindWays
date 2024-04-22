@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Register form</title>
+{% endblock %}
+
+{% block content %}
+<h1>Good day new user {{new_user.username}}</h1>
+<div class="row">
+  <h1>WELCOME a NEW USER TO A SYSTEM, you can <a href="{% url 'accounts:login' %}">Login</a></h1>
+</div>
+
+{% endblock %}
